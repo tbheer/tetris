@@ -6,8 +6,9 @@
  *
 Get & Set
 Array with 200+10 fields with 8 possible colours. 0 is empty
-highest point per row
-set new block
+
+Don t set the current block inside this playground.
+Fields must be 0 to check is block on bottom or move right or left
 
 Playground size is a Const and not chnagable
 
@@ -94,14 +95,23 @@ void Playground::killLine(uint8_t lineNo){
 
 // Insert a Line with a randnom space on the bottom
 void Playground::insertLine(){
-    // move oll blocks one row up
+    uint8_t space;
+    uint8_t firstCol = firstBlockColNewLine();
+
+    // move all blocks one row up
     for(uint8_t i = 0; i <= MAX_FIELD_NO - ROWS; i++){
         fields[i] = fields[i+ROWS];
     }
     // generate random space
+    space = generateRandomSpaceInLine();
     // insert line on bottom
-    for(uint8_t j = LINES * ROWS; j <= MAX_FIELD_NO; j++){
-
+    for(uint8_t j = LINES * ROWS - ROWS; j <= MAX_FIELD_NO; j++){     
+        if(space == j){
+            fields[j] = 0;
+        }
+        else{
+            fields[j] = (firstCol - 1 + j)%7 + 1;
+        }
     }
     // check overflow
 }
@@ -134,4 +144,91 @@ void Playground::setBlock(uint8_t *block){
     // compare block array and field
 }
 
+// check is block on bottom
+bool Playground::isOnBottom(uint8_t *blockArray){
+    for(uint8_t i = 0; i<4; i++){
+        if(*blockArray+ROWS!=0) return true;
+        blockArray++;
+    }
+    return false;
+}
 
+
+// Check is line Full
+// 0 is top line; 20 is bottomline
+bool Playground::isLineFull(uint8_t lineNo){ // playground as pointer const and line
+    uint8_t firstField = lineNo * 10;
+    uint8_t lastField = firstField + 9;
+    bool lineIsFull = false;
+    for(uint8_t i; i <= lastField; i++){
+        if(fields[i] = 0){
+            return false;
+        }
+    }
+    return true;
+}
+
+// Calculate space to the right side for all lines
+// block array as pointer
+bool Playground::isSpaceRight(uint8_t *blockArray){
+    for(uint8_t i = 0; i<4; i++){
+        if(*blockArray+1 != 0){
+            return false;
+        }
+        blockArray++;
+    }
+    return true;
+}
+
+// check possibility to move left with the block
+// block array as pointer
+bool Playground::isSpaceLeft(uint8_t *blockArray){ // playground as pointer and block as pointer
+    for(uint8_t i = 0; i<4; i++){
+        if(*blockArray-1 != 0){
+            return false;
+        }
+        blockArray++;
+    }
+    return true;
+
+}
+
+// Return is it possible to rotate
+bool Playground::canRotate(uint8_t *blockArrayRotated){ // playground as pointer and block as pointer
+    uint8_t origin = *blockArrayRotated%10;
+    for(uint8_t i = 0; i<4; i++){
+    // check for busy fields when block is rotated
+    if(fields[*blockArrayRotated] != 0) return false;
+    // check the right egde
+    if(origin > 5 && *blockArrayRotated < 5) return false;
+    }
+    return true;
+}
+
+//
+uint8_t Playground::getPreview(uint8_t *blockArray, uint8_t *previewArray){
+    //
+}
+
+
+
+//
+uint8_t Playground::generateRandomSpaceInLine(){
+
+}
+
+// defines the colour of the first block when a new line will inserted
+// generates a pattern, so that the colour is different to the line above
+uint8_t Playground::firstBlockColNewLine(){
+    uint8_t firstCol;
+    // colour of the first block in the new line
+    if(fields[ROWS*LINES-ROWS] == 0){
+        firstCol = 1;
+    }
+    else if(fields[ROWS*LINES-ROWS] == 7){
+        firstCol = 1;
+    }
+    else{
+        firstCol = fields[ROWS*LINES-ROWS] +1;
+    }
+}

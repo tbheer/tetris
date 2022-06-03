@@ -32,37 +32,35 @@ uint8_t Block::getRotation(){
     }    
 }
 
+//
+uint8_t Block::getOrigin(){
+    return origin;
+}
+
 // Returns the pointer to the first block position in a array of 4
 void Block::getBlockPositions(uint8_t *array){
-    originToArray(origin, array);
+    originToArray(origin, array, rotation, blockType);
+}
+
+// writes the position if the array would be rotated
+void Block::getBlockRotatedPositions(uint8_t *array){
+    originToArray(origin, array, rotation+1, blockType);
 }
 
 // Returns the pointer to the first block position in a array of 4
 void Block::getBlockPreview(uint8_t originBottom, uint8_t *array){
-    originToArray(originBottom, array);
+    originToArray(originBottom, array, rotation, blockType);
 }
 
-
-uint32_t Block::getColour(uint8_t blockType){
-    /*
-    // colour as 24bit (32) Hex Value?
-    uint8_t col[3] = {0,0,0};
-    switch (blockType)
-    {
-    case 0:
-
-        break;
-
-    default:
-        break;
-    }
-    return col;
-    */
-}
 
 //
 void Block::setBlockType(uint8_t type){
     blockType = type%8;
+}
+
+// Rotates the Block in clockwise
+void Block::rotate(){
+    rotation++;
 }
 
 // Move block one field right
@@ -77,15 +75,22 @@ void Block::moveLeft(){
     origin--;
 }
 
-// Rotates the Block in clockwise
-void Block::rotate(){
-    rotation++;
+// moves Block t a new position
+void Block::setOrigin(uint8_t newOrigin){
+    if(newOrigin < 210){
+        origin = newOrigin;
+    }
 }
 
-void Block::originToArray(uint8_t origin, uint8_t *array){
+//
+void Block::originToArray(uint8_t origin, 
+    uint8_t *array, 
+    uint8_t rotation,
+    uint8_t type
+){
     uint8_t tmpArray[4];
     uint8_t size = 4;
-    switch (blockType)
+    switch (type)
     {
     case 0:
         sumArrays(origin, array, &NULL_MATRIX[0], size);
@@ -166,7 +171,7 @@ void Block::originToArray(uint8_t origin, uint8_t *array){
 
 void Block::sumArrays(uint8_t origin, 
 	uint8_t *arrayToWrite, 
-	uint8_t const *arrayToRead, 
+	const uint8_t  *arrayToRead, 
 	uint8_t size
 ){
     for(uint8_t i = 0; i<size; i++){

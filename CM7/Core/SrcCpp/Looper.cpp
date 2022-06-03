@@ -7,9 +7,12 @@
 
 #include "Looper.h"
 
+
 // Constructor
 Looper::Looper() {
 	// TODO Auto-generated constructor stub
+
+    // Looper
 	while(true){
 	        switch(processState){
 	            case init0:
@@ -44,7 +47,7 @@ Looper::Looper() {
 	                break;
 
 	            case ranking:
-	                processState = select;
+	                processState = init0;
 	                break;
 	        }
 	    }
@@ -56,15 +59,21 @@ Looper::~Looper() {
 
 
 
-void runGame(){
+void Looper::runGame(){
+    gameRunning = true;
     while(gameRunning){
         switch(gameState){
             case init:
+                score = 0;
+                // set level
+                // multiplayer settings
+
                 gameState = generateNewBlock;
                 break;
             case blockDown:
                 // move down
-                if(true){   //block on bottom and fix block
+                
+                if(playground.isOnBottom(false)){   //block on bottom and fix block
                     gameState = fixBlock;
                 }
                 else if(false){ //move block pressed
@@ -114,15 +123,19 @@ void runGame(){
                 break;
             case fixBlock:
                 // fix block
-
+                if(false){  // check in MP mode
+                    gameRunning = false;
+                    processState = gameWon;
+                    gameState = init;
+                }
 
                 gameState = killLine;
                 break;
             case killLine:
                 //
                 for(uint8_t line = 0; line <= 21; line++){
-                    if(isOverflow()){
-                        killLine();
+                    if(playground.isOverflow()){
+                        //playground.killLine();
                     }
                     else{
 
@@ -133,9 +146,11 @@ void runGame(){
                 gameState = generateNewBlock;
                 break;
             case insertLine:
-                //insertLine();
-                if(isOverflow()){
-                    gameState = gameOver;
+                playground.insertLine();
+                if(playground.isOverflow()){
+                    gameRunning = false;
+                    gameState = init;
+                    processState = gameOver;
                 }
                 else{
                     gameState = generateNewBlock;
@@ -145,4 +160,19 @@ void runGame(){
     }
 }
 
+void Looper::generateBlocks(){
+    for(uint8_t i = 0; i < sizeof(nextBlocks); i++){
+        uint8_t rdmNo = calculations.getRdmBlock();
+        nextBlocks[i] = Block(rdmNo);
+    }
+    currentBlock = Block(calculations.getRdmBlock());
+}
 
+// 
+void Looper::getNewBlock(){
+    currentBlock = nextBlocks[0];
+    for(uint8_t i = 0; i < sizeof(nextBlocks); i++){
+        nextBlocks[i] = nextBlocks[i+1];
+    }
+    nextBlocks[sizeof(nextBlocks)] = Block(calculations.getRdmBlock());
+}

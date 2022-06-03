@@ -19,14 +19,13 @@ public:
 	Calculations();
 	virtual ~Calculations();
 
+	uint8_t getRdmBlock();
+	uint8_t getRdmSpaceInNewLine();
 
-	bool isLineFull(bool playground[209], uint8_t lineNumber);
-	uint8_t spaceRight();
-	uint8_t spaceLeft();
-	bool canRotate();
-	uint8_t getPreview();
+
 
 private:
+
 
 };
 

@@ -15,8 +15,9 @@ public:
 	Block(uint8_t blockType);
 	virtual ~Block();
 	uint8_t getRotation();
-	uint32_t getColour(uint8_t blockType);
+	uint8_t getOrigin();
 	void getBlockPositions(uint8_t *array);
+	void getBlockRotatedPositions(uint8_t *array);
 	void getBlockPreview(uint8_t originBottom, uint8_t *array);
 	void newBlock(uint8_t blockType);
 	void setBlockType(uint8_t type);
@@ -25,6 +26,7 @@ public:
 	void rotate();
 	void moveLeft();
 	void moveRight();
+	void setOrigin(uint8_t newOrigin);
 	
 
 private:
@@ -78,8 +80,9 @@ private:
 	const bool PYR2[4][4] = {{1,1,1,0},{0,1,0,0},{0,0,0,0},{0,0,0,0}};
 	const bool PYR3[4][4] = {{0,1,0,0},{1,1,0,0},{0,1,0,0},{0,0,0,0}};
 */
-
-// current matrix
+	// matrixes with all possible block types and rotation 
+	// on origin = 0 position
+	// current matrix
 	uint8_t currentMatrix[4];
 
 	// NULL matrix
@@ -111,21 +114,17 @@ private:
 	const uint8_t PYR2[4] = {0,1,2,11};
 	const uint8_t PYR3[4] = {1,10,11,21};
 
-	const uint8_t RED[3] = {255,0 ,0 };
-	uint8_t yelloy[3] = {255,255,0};
-	uint8_t magenta[3] = {255,0,255};
-	uint8_t blue[3] = {0,0,255};
-	uint8_t cyan[3] = {0,255,255};
-	uint8_t green[3] = {0,255,0};
-	uint8_t orange[3] = {255,122,122};
-	uint8_t white[3] = {255,255,255};
-	uint8_t black[3] = {0,0,0};
 	
-	void originToArray(uint8_t origin, uint8_t *array);
+	void originToArray(uint8_t origin, 
+		uint8_t *array, 
+		uint8_t rotation,
+	 	uint8_t type
+	);
 	void sumArrays(uint8_t origin, 
 		uint8_t *arrayToWrite, 
-		uint8_t const *arrayToRead, 
-		uint8_t size);
+		const uint8_t *arrayToRead, 
+		uint8_t size
+	);
 	
 };
 

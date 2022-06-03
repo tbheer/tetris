@@ -28,7 +28,8 @@ public:
 	    singlePlayer=40,
 	    multiPlayer=50,
 	    gameOver=60,
-	    ranking=70
+		gameWon=70,
+	    ranking=80
 	};
 
 	enum GameState{init=0,
@@ -55,25 +56,33 @@ public:
 
 private:
 	// Variables
+	// general
+	Calculations calculations = Calculations();
+
+	// FSM
 	ProcessState processState = init0;
 	GameState gameState = init;
 
+	// timer and timer references
 	uint16_t moveBlockTimer = 100;// in ms
 	uint8_t blockDownCnt = 10; // numbers of moves before move block one field down
 	uint16_t timer;
 	uint8_t counter;
 
+	// game controll
 	uint16_t score = 0;
-	uint8_t scoreMultiplier = 1;
+	uint8_t scoreMultiplier = 1;	//aka. Level
 	bool gameRunning;
 
-
-	Block currentBlock;
+	// blocks & playgrounds
+	Block currentBlock = Block();
 	Block nextBlocks[5];
-	Playground playground = new Playground();
+	Playground playground = Playground();
 
 	// Methods
-	void runGame()
+	void runGame();
+	void generateBlocks();
+	void getNewBlock();
 
 };
 
