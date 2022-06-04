@@ -38,17 +38,17 @@ uint8_t Block::getOrigin(){
 }
 
 // Returns the pointer to the first block position in a array of 4
-void Block::getBlockPositions(uint8_t *array){
-    originToArray(origin, array, rotation, blockType);
+uint8_t* Block::getBlockPositions(){
+    originToArray(origin, &currentMatrix[0], rotation, blockType);
 }
 
 // writes the position if the array would be rotated
-void Block::getBlockRotatedPositions(uint8_t *array){
+uint8_t* Block::getBlockRotatedPositions(uint8_t *array){
     originToArray(origin, array, rotation+1, blockType);
 }
 
 // Returns the pointer to the first block position in a array of 4
-void Block::getBlockPreview(uint8_t originBottom, uint8_t *array){
+uint8_t* Block::getBlockPreview(uint8_t originBottom, uint8_t *array){
     originToArray(originBottom, array, rotation, blockType);
 }
 

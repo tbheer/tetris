@@ -21,7 +21,7 @@ public:
 	virtual ~Looper();
 
 	// Enums
-	enum ProcessState{init0=0,
+	enum ProcessState{init=0,
 	    selectGameMode=10,
 	    gameSettingsSp=20,
 	    gameSettingsMp=30,
@@ -32,7 +32,7 @@ public:
 	    ranking=80
 	};
 
-	enum GameState{init=0,
+	enum GameState{startGame=0,
 	    generateNewBlock=10,
 	    blockDown=20,
 	    moveBlock=40,
@@ -43,7 +43,7 @@ public:
 	    insertLine=120
 	};
 
-	enum Block{empty=0,
+	enum BlockType{empty=0,
 	    spaghetti=1,
 	    square=2,
 	    invZ=3,
@@ -60,29 +60,38 @@ private:
 	Calculations calculations = Calculations();
 
 	// FSM
-	ProcessState processState = init0;
-	GameState gameState = init;
+	ProcessState processState = init;
+	GameState gameState = startGame;
 
 	// timer and timer references
 	uint16_t moveBlockTimer = 100;// in ms
-	uint8_t blockDownCnt = 10; // numbers of moves before move block one field down
-	uint16_t timer;
-	uint8_t counter;
+	const uint8_t INIT_BLOCK_DOWN_CNT = 10;
+	uint8_t blockDownCnt = INIT_BLOCK_DOWN_CNT; // numbers of moves before move block one field down
+	uint16_t timer;		// when timer "overflows" move block
+	uint8_t counter;	// counts how often the move timer overflowed
 
 	// game controll
 	uint16_t score = 0;
-	uint8_t scoreMultiplier = 1;	//aka. Level
+	//uint8_t scoreMultiplier = 1;	//aka. Level use blockLevel cnt
+	uint8_t killedLines;
+	uint16_t blocksInGame;
 	bool gameRunning;
+	bool moveBlockOnBottom = true;
 
 	// blocks & playgrounds
-	Block currentBlock = Block();
-	Block nextBlocks[5];
 	Playground playground = Playground();
+	Block playBlocks[5];
+	uint8_t currentBlockNo = 0;
+	uint8_t nextBlockNo = 1;
+
 
 	// Methods
 	void runGame();
 	void generateBlocks();
 	void getNewBlock();
+	void stateFixBlock();
+	void changeStateInBlockDown();
+	
 
 };
 

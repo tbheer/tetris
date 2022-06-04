@@ -13,13 +13,13 @@ class Block {
 public:
 	Block();
 	Block(uint8_t blockType);
+	void newBlock(uint8_t blockType);
 	virtual ~Block();
 	uint8_t getRotation();
 	uint8_t getOrigin();
-	void getBlockPositions(uint8_t *array);
-	void getBlockRotatedPositions(uint8_t *array);
-	void getBlockPreview(uint8_t originBottom, uint8_t *array);
-	void newBlock(uint8_t blockType);
+	uint8_t* getBlockPositions();
+	uint8_t* getBlockRotatedPositions(uint8_t *array);
+	uint8_t* getBlockPreview(uint8_t originBottom, uint8_t *array);
 	void setBlockType(uint8_t type);
 	void moveOneLineDown();
 	void moveToBottom();
