@@ -76,7 +76,7 @@ private:
 	uint8_t killedLines;
 	uint16_t blocksInGame;
 	bool gameRunning;
-	bool moveBlockOnBottom = true;
+	// bool moveBlockOnBottom = true;
 
 	// blocks & playgrounds
 	Playground playground = Playground();
@@ -89,9 +89,19 @@ private:
 	void runGame();
 	void generateBlocks();
 	void getNewBlock();
+
+	// action in states
+	void stateBlockDown();
+	void stateMoveBlock();
+	void stateRotateBlock();
 	void stateFixBlock();
+	void stateKillLine();
+
+	// transition requirements from states
 	void changeStateInBlockDown();
+	void changeStateIdle();
 	
+	void finalizeGame();
 
 };
 

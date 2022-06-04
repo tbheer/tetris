@@ -139,9 +139,21 @@ bool Playground::isLineFull(uint8_t lineNo){
     return true;
 }
 
-void Playground::setBlock(uint8_t *block){
+
+void Playground::setField(uint8_t fieldNo, uint8_t blockType){
     // write colNo to the field 0..7
     // compare block array and field
+    if(blockType < 8 && blockType > 0){
+        if(fieldNo<=MAX_FIELD_NO){
+            fields[fieldNo] = blockType;
+        }
+        else{
+
+        }
+    }
+    else{
+        
+    }
 }
 
 // check is block on bottom

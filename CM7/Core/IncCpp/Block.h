@@ -15,8 +15,10 @@ public:
 	Block(uint8_t blockType);
 	void newBlock(uint8_t blockType);
 	virtual ~Block();
+	void renewBlock(uint8_t type);
 	uint8_t getRotation();
 	uint8_t getOrigin();
+	uint8_t getBlockType();
 	uint8_t* getBlockPositions();
 	uint8_t* getBlockRotatedPositions(uint8_t *array);
 	uint8_t* getBlockPreview(uint8_t originBottom, uint8_t *array);
@@ -35,7 +37,6 @@ private:
 	uint8_t blockPositions[4];
 	uint8_t previewPositions[4];
 	uint8_t rotation = 0;
-	uint8_t colour[3] = {0,0,0};
 
 	// space down to next field?
 	// space left and right?
@@ -114,6 +115,7 @@ private:
 	const uint8_t PYR2[4] = {0,1,2,11};
 	const uint8_t PYR3[4] = {1,10,11,21};
 
+	const uint8_t FIRST_ORIGIN = 4;
 	
 	void originToArray(uint8_t origin, 
 		uint8_t *array, 

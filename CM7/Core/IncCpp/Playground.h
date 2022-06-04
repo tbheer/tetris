@@ -22,7 +22,7 @@ public:
     void insertLine();
     uint8_t highestPointInRow(uint8_t rowNo);
     bool isLineFull(uint8_t lineNo);
-    void setBlock(uint8_t *block);
+    void setField(uint8_t fieldNo, uint8_t blockType);
 
     //
     bool isOnBottom(uint8_t *blockArray);

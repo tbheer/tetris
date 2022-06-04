@@ -21,6 +21,14 @@ Block::~Block() {
 	// TODO Auto-generated destructor stub
 }
 
+// reset properties an set new type
+void Block::renewBlock(uint8_t type){
+    Block::blockType = type;
+    origin = FIRST_ORIGIN;
+    rotation = 0;
+    getBlockPositions();
+}
+
 // returns the rotation 0 = standart, 1 = 90 in clockdwise
 // 2 = 180, 3 = 270. If the rotation is >3 then % through 4
 uint8_t Block::getRotation(){
@@ -32,9 +40,14 @@ uint8_t Block::getRotation(){
     }    
 }
 
-//
+// returns the origin point of the block
 uint8_t Block::getOrigin(){
     return origin;
+}
+
+// returns the blocktype
+uint8_t Block::getBlockType(){
+    return blockType;
 }
 
 // Returns the pointer to the first block position in a array of 4
