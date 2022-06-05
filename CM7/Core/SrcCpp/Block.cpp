@@ -53,20 +53,23 @@ uint8_t Block::getBlockType(){
 // Returns the pointer to the first block position in a array of 4
 uint8_t* Block::getBlockPositions(){
     originToArray(origin, &currentMatrix[0], rotation, blockType);
+    return &currentMatrix[0];
 }
 
 // writes the position if the array would be rotated
 uint8_t* Block::getBlockRotatedPositions(uint8_t *array){
     originToArray(origin, array, rotation+1, blockType);
+    return array;
 }
 
 // Returns the pointer to the first block position in a array of 4
 uint8_t* Block::getBlockPreview(uint8_t originBottom, uint8_t *array){
     originToArray(originBottom, array, rotation, blockType);
+    return array;
 }
 
 
-//
+// Change block type
 void Block::setBlockType(uint8_t type){
     blockType = type%8;
 }
@@ -95,13 +98,14 @@ void Block::setOrigin(uint8_t newOrigin){
     }
 }
 
-//
+// calculates the position of the four block parts and retuns the values
+// in the array pointer. Calculated on the basis of origin, rotation and type
 void Block::originToArray(uint8_t origin, 
     uint8_t *array, 
     uint8_t rotation,
     uint8_t type
 ){
-    uint8_t tmpArray[4];
+
     uint8_t size = 4;
     switch (type)
     {
@@ -182,6 +186,8 @@ void Block::originToArray(uint8_t origin,
     }
 }
 
+// calculates the position in the playground based on origin and the 
+// default array.
 void Block::sumArrays(uint8_t origin, 
 	uint8_t *arrayToWrite, 
 	const uint8_t  *arrayToRead, 

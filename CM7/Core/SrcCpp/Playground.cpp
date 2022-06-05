@@ -38,7 +38,9 @@ Top line is invisible on screen
 
 #include "Playground.h"
 
-
+/*
+Constructors and deconstructors
+*/
 Playground::Playground() {
 	// TODO Auto-generated constructor stub
 
@@ -48,8 +50,9 @@ Playground::~Playground() {
 	// TODO Auto-generated destructor stub
 }
 
-
-
+/*
+Geter Methods
+*/
 // return the full array of playfield maybe as pointer to the first field
 uint8_t * Playground::getFields(){
     return fields;
@@ -68,18 +71,9 @@ uint8_t Playground::getField(uint8_t fieldNo){
     return fields[fieldNo];
 }
 
-// is a block in the top line, 0.. row-1
-bool Playground::isOverflow(){
-    for(uint8_t i = 0; i < ROWS; i++){
-        if(fields[i] != 0){
-            return true;
-        }
-    }
-    return false;
-}
-
-
-
+/*
+Seter Methods
+*/
 // Kill the line and move all blocks above one field down
 void Playground::killLine(uint8_t lineNo){
     // special gui effects?
@@ -94,19 +88,16 @@ void Playground::killLine(uint8_t lineNo){
 }
 
 // Insert a Line with a randnom space on the bottom
-void Playground::insertLine(){
-    uint8_t space;
+void Playground::insertLine(uint8_t rdmSpace){
     uint8_t firstCol = firstBlockColNewLine();
 
     // move all blocks one row up
     for(uint8_t i = 0; i <= MAX_FIELD_NO - ROWS; i++){
         fields[i] = fields[i+ROWS];
     }
-    // generate random space
-    space = generateRandomSpaceInLine();
     // insert line on bottom
     for(uint8_t j = LINES * ROWS - ROWS; j <= MAX_FIELD_NO; j++){     
-        if(space == j){
+        if(rdmSpace == j){
             fields[j] = 0;
         }
         else{
@@ -115,30 +106,6 @@ void Playground::insertLine(){
     }
     // check overflow
 }
-
-// returns the line number of highest block in row
-uint8_t Playground::highestPointInRow(uint8_t rowNo){
-    uint8_t fieldNo = rowNo;
-    for(fieldNo; fieldNo <= MAX_FIELD_NO; fieldNo -= ROWS){
-        if(fields[fieldNo] != 0){
-            return (fieldNo % ROWS);
-        }
-    }
-    return LINES + 1;
-}
-
-// check is line full. Is full when no field is 0
-bool Playground::isLineFull(uint8_t lineNo){
-    uint8_t fieldNo = lineNo *ROWS;
-    uint8_t maxFieldNo = lineNo * ROWS + ROWS - 1;
-    for(fieldNo; fieldNo <= maxFieldNo; fieldNo++){
-        if(fields[fieldNo] == 0){
-            return false;
-        }
-    }
-    return true;
-}
-
 
 void Playground::setField(uint8_t fieldNo, uint8_t blockType){
     // write colNo to the field 0..7
@@ -156,6 +123,19 @@ void Playground::setField(uint8_t fieldNo, uint8_t blockType){
     }
 }
 
+/*
+Checking methods
+*/
+// is a block in the top line, 0.. row-1
+bool Playground::isOverflow(){
+    for(uint8_t i = 0; i < ROWS; i++){
+        if(fields[i] != 0){
+            return true;
+        }
+    }
+    return false;
+}
+
 // check is block on bottom
 bool Playground::isOnBottom(uint8_t *blockArray){
     for(uint8_t i = 0; i<4; i++){
@@ -165,7 +145,19 @@ bool Playground::isOnBottom(uint8_t *blockArray){
     return false;
 }
 
+// check is line full. Is full when no field is 0
+bool Playground::isLineFull(uint8_t lineNo){
+    uint8_t fieldNo = lineNo *ROWS;
+    uint8_t maxFieldNo = lineNo * ROWS + ROWS - 1;
+    for(fieldNo; fieldNo <= maxFieldNo; fieldNo++){
+        if(fields[fieldNo] == 0){
+            return false;
+        }
+    }
+    return true;
+}
 
+/*
 // Check is line Full
 // 0 is top line; 20 is bottomline
 bool Playground::isLineFull(uint8_t lineNo){ // playground as pointer const and line
@@ -178,7 +170,7 @@ bool Playground::isLineFull(uint8_t lineNo){ // playground as pointer const and 
         }
     }
     return true;
-}
+}*/
 
 // Calculate space to the right side for all lines
 // block array as pointer
@@ -217,17 +209,28 @@ bool Playground::canRotate(uint8_t *blockArrayRotated){ // playground as pointer
     return true;
 }
 
-//
+// returns the line number of highest block in row
+uint8_t Playground::highestPointInRow(uint8_t rowNo){
+    uint8_t fieldNo = rowNo;
+    for(fieldNo; fieldNo <= MAX_FIELD_NO; fieldNo -= ROWS){
+        if(fields[fieldNo] != 0){
+            return (fieldNo % ROWS);
+        }
+    }
+    return LINES + 1;
+}
+
+/*
+Miscellanious methods
+*/
+// TO BE DEFINED WITH DISPLAY INTERFACE HOW IT SHOULD RUN
 uint8_t Playground::getPreview(uint8_t *blockArray, uint8_t *previewArray){
-    //
+    return 0;
 }
 
-
-
-//
-uint8_t Playground::generateRandomSpaceInLine(){
-
-}
+/*
+Private methods
+*/
 
 // defines the colour of the first block when a new line will inserted
 // generates a pattern, so that the colour is different to the line above

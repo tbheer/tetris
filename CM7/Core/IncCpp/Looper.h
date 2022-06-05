@@ -88,9 +88,10 @@ private:
 	// Methods
 	void runGame();
 	void generateBlocks();
-	void getNewBlock();
 
 	// action in states
+	void stateStartGame();
+	void stateNewBlock();
 	void stateBlockDown();
 	void stateMoveBlock();
 	void stateRotateBlock();
