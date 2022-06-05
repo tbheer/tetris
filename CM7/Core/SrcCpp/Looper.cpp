@@ -52,7 +52,9 @@ Looper::Looper() {
                     // show screen and wait a moment
 	                processState = ranking;
 	                break;
-
+	            case gameWon:
+	            	//SHOW SCREEN
+	            	break;
 	            case ranking:
                     // show screen and wait a moment
 	                processState = init;
@@ -72,18 +74,11 @@ void Looper::runGame(){
     while(gameRunning){
         switch(gameState){
             case startGame:
-                blockDownCnt = INIT_BLOCK_DOWN_CNT;
-                score = 0;
-                killedLines = 0;
-                blocksInGame = 0;
-                generateBlocks();
-                /// set level
-                // multiplayer settings
-
+                stateStartGame();
                 gameState = generateNewBlock;
                 break;
             case generateNewBlock:
-                getNewBlock();
+                stateNewBlock();
                 gameState = blockDown;
                 break;
             case blockDown:
@@ -132,7 +127,7 @@ void Looper::runGame(){
                 break;
             case insertLine:
                 // CHECK HOW MANY LINES
-                playground.insertLine();
+                playground.insertLine(calculations.getRdmSpaceInNewLine());
                 if(playground.isOverflow()){
                     finalizeGame();
                     processState = gameOver;
@@ -152,8 +147,20 @@ void Looper::generateBlocks(){
    }
 }
 
+// TO DO, SET LEVEL, MULTIPLAYER
+void Looper::stateStartGame(){
+    blockDownCnt = INIT_BLOCK_DOWN_CNT;
+    score = 0;
+    killedLines = 0;
+    blocksInGame = 0;
+    generateBlocks();
+    /// set level
+    // multiplayer settings
+}
+
 // increase the "pointer" with the current and next block or goes to zero
-void Looper::getNewBlock(){
+void Looper::stateNewBlock(){
+    blocksInGame++;
     playBlocks[currentBlockNo].renewBlock(calculations.getRdmBlock());
     currentBlockNo++;
     if (currentBlockNo >= sizeof(playBlocks)){
