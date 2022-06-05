@@ -168,17 +168,17 @@ bool Playground::isOnBottom(uint8_t *blockArray){
 
 // Check is line Full
 // 0 is top line; 20 is bottomline
-bool Playground::isLineFull(uint8_t lineNo){ // playground as pointer const and line
-    uint8_t firstField = lineNo * 10;
-    uint8_t lastField = firstField + 9;
-    bool lineIsFull = false;
-    for(uint8_t i; i <= lastField; i++){
-        if(fields[i] = 0){
-            return false;
-        }
-    }
-    return true;
-}
+//bool Playground::isLineFull(uint8_t lineNo){ // playground as pointer const and line 131
+//    uint8_t firstField = lineNo * 10;
+//    uint8_t lastField = firstField + 9;
+//    bool lineIsFull = false;
+//    for(uint8_t i; i <= lastField; i++){
+//        if(fields[i] = 0){
+//            return false;
+//        }
+//    }
+//    return true;
+//} //(Sven Wanzenried:) Commented, because equivanent function @line 131
 
 // Calculate space to the right side for all lines
 // block array as pointer
