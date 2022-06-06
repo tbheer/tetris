@@ -275,35 +275,34 @@ void ST7735_Drawaxes(uint16_t axisColor, uint16_t bgColor, char *xLabel,char *yL
 }
 	
 void ST7735_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color) {
-  uint8_t hi = color >> 8, lo = color;
+  uint8_t buffer[] = {(uint8_t)(color >> 8), (uint8_t)color};
 
 	LCD_CS0;
   // Rudimentary clipping
   if((x >= ST7735_WIDTH) || (y >= ST7735_HEIGHT)) return;
   if((x+w-1) >= ST7735_WIDTH)  w = ST7735_WIDTH-x;
   ST7735_SetAddressWindow(x, y, x+w-1, y);
-
+  LCD_DC1;//Set DC HIGH
   while (w--) {
-    lcd7735_sendData(hi);
-    lcd7735_sendData(lo);
+	  HAL_SPI_Transmit(&hspi5, buffer, sizeof(buffer),10);
   }
-	LCD_CS1;
+  LCD_CS1;
+
 }
 
 void ST7735_DrawFastVLine(int16_t x, int16_t y, int16_t h, uint16_t color) {
-  uint8_t hi = color >> 8, lo = color;
+	uint8_t buffer[] = {(uint8_t)(color >> 8), (uint8_t)color};
 	LCD_CS0;
 
   // Rudimentary clipping
   if((x >= ST7735_WIDTH) || (y >= ST7735_HEIGHT)) return;
   if((y+h-1) >= ST7735_HEIGHT) h = ST7735_HEIGHT-y;
   ST7735_SetAddressWindow(x, y, x, y+h-1);
-
+  LCD_DC1;//Set DC HIGH
   while (h--) {
-    lcd7735_sendData(hi);
-    lcd7735_sendData(lo);
+	  HAL_SPI_Transmit(&hspi5, buffer, sizeof(buffer),10);
   }
-	LCD_CS1;
+  LCD_CS1;
 }
 	
 void ST7735_FillRectangle(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color) {

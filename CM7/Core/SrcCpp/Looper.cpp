@@ -9,6 +9,7 @@
 #include "st7735.h"
 #include "main.h"
 #include <Adafruit_TFTShield18.h>
+#include "TFT_Functions.h"
 
 // Constructor
 Looper::Looper() {
@@ -40,17 +41,9 @@ void Looper::run()
 	// Serial.print("Version: "); Serial.println(ss.getVersion(), HEX);
 
 	// Start set the backlight off
-	ss.setBacklight(TFTSHIELD_BACKLIGHT_OFF);
-	HAL_Delay(500);
-	ss.setBacklight(TFTSHIELD_BACKLIGHT_ON);
-	HAL_Delay(500);
-	ss.setBacklight(TFTSHIELD_BACKLIGHT_OFF);
-	HAL_Delay(500);
 	ss.setBacklight(TFTSHIELD_BACKLIGHT_ON);
 	// Reset the TFT
 
-	ss.tftReset(1);
-	HAL_Delay(100);
 	ss.tftReset(0);
 	HAL_Delay(100);
 	ss.tftReset(1);
@@ -58,7 +51,9 @@ void Looper::run()
 
 	ST7735_Init();
 
-	ST7735_FillScreen(ST7735_BLUE);
+	ST7735_FillScreen(ST7735_BLACK);
+
+	setUpField();
 
 	while(true){
 
