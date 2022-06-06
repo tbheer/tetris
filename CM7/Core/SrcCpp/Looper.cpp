@@ -6,15 +6,63 @@
  */
 
 #include "Looper.h"
-
+#include "st7735.h"
+#include "main.h"
+#include <Adafruit_TFTShield18.h>
 
 // Constructor
 Looper::Looper() {
 	// TODO Auto-generated constructor stub
 
     // Looper
+
+
+}
+
+
+
+Looper::~Looper() {
+	// TODO Auto-generated destructor stub
+}
+
+void Looper::run()
+{
+
+
+
+	Adafruit_TFTShield18 ss;
+
+	if (!ss.begin()){
+	//    Serial.println("seesaw could not be initialized!");
+	//    while(1);
+	}
+	//  Serial.println("seesaw started");
+	// Serial.print("Version: "); Serial.println(ss.getVersion(), HEX);
+
+	// Start set the backlight off
+	ss.setBacklight(TFTSHIELD_BACKLIGHT_OFF);
+	HAL_Delay(500);
+	ss.setBacklight(TFTSHIELD_BACKLIGHT_ON);
+	HAL_Delay(500);
+	ss.setBacklight(TFTSHIELD_BACKLIGHT_OFF);
+	HAL_Delay(500);
+	ss.setBacklight(TFTSHIELD_BACKLIGHT_ON);
+	// Reset the TFT
+
+	ss.tftReset(1);
+	HAL_Delay(100);
+	ss.tftReset(0);
+	HAL_Delay(100);
+	ss.tftReset(1);
+	HAL_Delay(7);
+
+	ST7735_Init();
+
+	ST7735_FillScreen(ST7735_BLUE);
+
 	while(true){
-	        switch(processState){
+
+/*	        switch(processState){
 	            case init:
                     // init system, ethernet, screen, buttons
 	                processState = selectGameMode;
@@ -59,15 +107,9 @@ Looper::Looper() {
                     // show screen and wait a moment
 	                processState = init;
 	                break;
-	        }
+	        }*/
 	    }
 }
-
-Looper::~Looper() {
-	// TODO Auto-generated destructor stub
-}
-
-
 
 void Looper::runGame(){
     gameRunning = true;
@@ -139,6 +181,7 @@ void Looper::runGame(){
         }
     }
 }
+
 
 // Generates 5 new block in the array with default origin
 void Looper::generateBlocks(){

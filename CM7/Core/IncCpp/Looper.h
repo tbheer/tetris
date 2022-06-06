@@ -19,6 +19,7 @@ class Looper {
 public:
 	Looper();
 	virtual ~Looper();
+	void run();
 
 	// Enums
 	enum ProcessState{init=0,
