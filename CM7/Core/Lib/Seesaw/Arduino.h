@@ -9,9 +9,9 @@
 #define SEESAW_ARDUINO_H_
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
-
 
 #include <stddef.h>
 #include <stdlib.h>
@@ -45,15 +45,11 @@ uint8_t min(uint8_t a, uint8_t b);
 long map(long x, long in_min, long in_max, long out_min, long out_max);
 uint16_t constrain(uint16_t x, uint16_t a, uint16_t b);
 
-
 typedef I2C_HandleTypeDef TwoWire;
 //TwoWire* WireI2C = &hi2c1;
 
 #ifdef __cplusplus
 }
 #endif
-
-
-
 
 #endif /* SEESAW_ARDUINO_H_ */

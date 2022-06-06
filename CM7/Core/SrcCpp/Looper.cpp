@@ -12,329 +12,362 @@
 #include "TFT_Functions.h"
 
 // Constructor
-Looper::Looper() {
-	// TODO Auto-generated constructor stub
-
-    // Looper
-
-
+Looper::Looper()
+{
+  // TODO Auto-generated constructor stub
 }
 
-
-
-Looper::~Looper() {
-	// TODO Auto-generated destructor stub
+Looper::~Looper()
+{
+  // TODO Auto-generated destructor stub
 }
 
 void Looper::run()
 {
 
+  Adafruit_TFTShield18 ss;
 
+  ss.begin();
+  // Start set the backlight on
+  ss.setBacklight(TFTSHIELD_BACKLIGHT_ON);
+  // Reset the TFT
+  ss.tftReset(0);
+  HAL_Delay(100);
+  ss.tftReset(1);
+  HAL_Delay(7);
 
-	Adafruit_TFTShield18 ss;
+  // Initialize TFT
+  ST7735_Init();
+  ST7735_FillScreen(ST7735_BLACK);
+  setUpField();
 
-	if (!ss.begin()){
-	//    Serial.println("seesaw could not be initialized!");
-	//    while(1);
-	}
-	//  Serial.println("seesaw started");
-	// Serial.print("Version: "); Serial.println(ss.getVersion(), HEX);
+  while (true)
+  {
 
-	// Start set the backlight off
-	ss.setBacklight(TFTSHIELD_BACKLIGHT_ON);
-	// Reset the TFT
-
-	ss.tftReset(0);
-	HAL_Delay(100);
-	ss.tftReset(1);
-	HAL_Delay(7);
-
-	ST7735_Init();
-
-	ST7735_FillScreen(ST7735_BLACK);
-
-	setUpField();
-
-	while(true){
-
-/*	        switch(processState){
-	            case init:
-                    // init system, ethernet, screen, buttons
-	                processState = selectGameMode;
-	                break;
-	            case selectGameMode:
-                    // Show screen
-	                if(true){ // button pushed
-	                    processState = gameSettingsSp;
-	                }
-	                else if(false){
-	                    processState = gameSettingsMp;
-	                }
-	                break;
-
-	            case gameSettingsSp:
-                    // Show screen, set start level aso.
-	                if(true){ // button pushed
-	                    processState = singlePlayer;
-	                }
-	                break;
-
-	            case gameSettingsMp:
-	                //implement see single player and add mp parameters
-	                break;
-	            case singlePlayer:
-                    // maybe implement the loop here
-	                runGame(); // singlePlayer as parameter
-	                break;
-	            case multiPlayer:
-                    // maybe implement the loop here
-	                // implement
-                    runGame();
-	                break;
-	            case gameOver:
-                    // show screen and wait a moment
-	                processState = ranking;
-	                break;
-	            case gameWon:
-	            	//SHOW SCREEN
-	            	break;
-	            case ranking:
-                    // show screen and wait a moment
-	                processState = init;
-	                break;
-	        }*/
-	    }
+//    switch (processState)
+//    {
+//    case init:
+//      // init system, ethernet, screen, buttons
+//      processState = selectGameMode;
+//      break;
+//    case selectGameMode:
+//      // Show screen
+//      if (true)
+//      { // button pushed
+//        processState = gameSettingsSp;
+//      }
+//      else if (false)
+//      {
+//        processState = gameSettingsMp;
+//      }
+//      break;
+//
+//    case gameSettingsSp:
+//      // Show screen, set start level aso.
+//      if (true)
+//      { // button pushed
+//        processState = singlePlayer;
+//      }
+//      break;
+//
+//    case gameSettingsMp:
+//      //implement see single player and add mp parameters
+//      break;
+//    case singlePlayer:
+//      // maybe implement the loop here
+//      runGame(); // singlePlayer as parameter
+//      break;
+//    case multiPlayer:
+//      // maybe implement the loop here
+//      // implement
+//      runGame();
+//      break;
+//    case gameOver:
+//      // show screen and wait a moment
+//      processState = ranking;
+//      break;
+//    case gameWon:
+//      //SHOW SCREEN
+//      break;
+//    case ranking:
+//      // show screen and wait a moment
+//      processState = init;
+//      break;
+//    }
+  }
 }
 
-void Looper::runGame(){
-    gameRunning = true;
-    while(gameRunning){
-        switch(gameState){
-            case startGame:
-                stateStartGame();
-                gameState = generateNewBlock;
-                break;
-            case generateNewBlock:
-                stateNewBlock();
-                gameState = blockDown;
-                break;
-            case blockDown:
-                // 
-                stateBlockDown();
-                changeStateInBlockDown();
-                break;
-            case moveBlock:
-                stateMoveBlock();
-                // Change state
-                if(true){// TO DO BTN PUSHED
-                    gameState = rotateBlock;
-                }
-                else{
-                    gameState = idle;
-                }
-                break;
-            case rotateBlock:
-                stateRotateBlock();
-                gameState = idle;
-                break;
-            case idle:
-                changeStateIdle();
-                break;
-            case fixBlock:
-                stateFixBlock();                
-                // CHECK IN MULTIPLAYER MODE HOW MANY PLAYERS REMAIN
-                if(false){  // check in MP mode
-                    processState = gameWon;
-                    finalizeGame();
-                }
-                // Change state
-                gameState = killLine;
-                break;
-            case killLine:
-                // check all lines & kill line
-                stateKillLine();
-                // change state
-                if(playground.isOverflow()){
-                    finalizeGame();
-                    processState = gameOver;
-                }
-                else{
-                    gameState = insertLine;
-                }
-                break;
-            case insertLine:
-                // CHECK HOW MANY LINES
-                playground.insertLine(calculations.getRdmSpaceInNewLine());
-                if(playground.isOverflow()){
-                    finalizeGame();
-                    processState = gameOver;
-                }
-                else{
-                    gameState = generateNewBlock;
-                }
-                break;
-        }
+void Looper::runGame()
+{
+  gameRunning = true;
+  while (gameRunning)
+  {
+    switch (gameState)
+    {
+    case startGame:
+      stateStartGame();
+      gameState = generateNewBlock;
+      break;
+    case generateNewBlock:
+      stateNewBlock();
+      gameState = blockDown;
+      break;
+    case blockDown:
+      //
+      stateBlockDown();
+      changeStateInBlockDown();
+      break;
+    case moveBlock:
+      stateMoveBlock();
+      // Change state
+      if (true)
+      {	// TO DO BTN PUSHED
+        gameState = rotateBlock;
+      }
+      else
+      {
+        gameState = idle;
+      }
+      break;
+    case rotateBlock:
+      stateRotateBlock();
+      gameState = idle;
+      break;
+    case idle:
+      changeStateIdle();
+      break;
+    case fixBlock:
+      stateFixBlock();
+      // CHECK IN MULTIPLAYER MODE HOW MANY PLAYERS REMAIN
+      if (false)
+      {  // check in MP mode
+        processState = gameWon;
+        finalizeGame();
+      }
+      // Change state
+      gameState = killLine;
+      break;
+    case killLine:
+      // check all lines & kill line
+      stateKillLine();
+      // change state
+      if (playground.isOverflow())
+      {
+        finalizeGame();
+        processState = gameOver;
+      }
+      else
+      {
+        gameState = insertLine;
+      }
+      break;
+    case insertLine:
+      // CHECK HOW MANY LINES
+      playground.insertLine(calculations.getRdmSpaceInNewLine());
+      if (playground.isOverflow())
+      {
+        finalizeGame();
+        processState = gameOver;
+      }
+      else
+      {
+        gameState = generateNewBlock;
+      }
+      break;
     }
+  }
 }
-
 
 // Generates 5 new block in the array with default origin
-void Looper::generateBlocks(){
-   for(uint8_t i = 0; i<sizeof(playBlocks); i++){
-       playBlocks[i].renewBlock(calculations.getRdmBlock());
-   }
+void Looper::generateBlocks()
+{
+  for (uint8_t i = 0; i < sizeof(playBlocks); i++)
+  {
+    playBlocks[i].renewBlock(calculations.getRdmBlock());
+  }
 }
 
 // TO DO, SET LEVEL, MULTIPLAYER
-void Looper::stateStartGame(){
-    blockDownCnt = INIT_BLOCK_DOWN_CNT;
-    score = 0;
-    killedLines = 0;
-    blocksInGame = 0;
-    generateBlocks();
-    /// set level
-    // multiplayer settings
+void Looper::stateStartGame()
+{
+  blockDownCnt = INIT_BLOCK_DOWN_CNT;
+  score = 0;
+  killedLines = 0;
+  blocksInGame = 0;
+  generateBlocks();
+  /// set level
+  // multiplayer settings
 }
 
 // increase the "pointer" with the current and next block or goes to zero
-void Looper::stateNewBlock(){
-    blocksInGame++;
-    playBlocks[currentBlockNo].renewBlock(calculations.getRdmBlock());
-    currentBlockNo++;
-    if (currentBlockNo >= sizeof(playBlocks)){
-        currentBlockNo = 0;
-    }
-    nextBlockNo++;
-    if (nextBlockNo >= sizeof(playBlocks)){
-        nextBlockNo = 0;
-    }    
+void Looper::stateNewBlock()
+{
+  blocksInGame++;
+  playBlocks[currentBlockNo].renewBlock(calculations.getRdmBlock());
+  currentBlockNo++;
+  if (currentBlockNo >= sizeof(playBlocks))
+  {
+    currentBlockNo = 0;
+  }
+  nextBlockNo++;
+  if (nextBlockNo >= sizeof(playBlocks))
+  {
+    nextBlockNo = 0;
+  }
 }
 
 //
-void Looper::stateBlockDown(){
-    // is alredy checked that the block is not on bottom
-    playBlocks[currentBlockNo].moveOneLineDown();
-    
-    /*if (playground.isOnBottom(playBlocks[currentBlockNo].getBlockPositions())){
-        if ()
-        { // block on bottom and fix block
-            changeStateInBlockDown();
-        }
-        else{
-            moveBlockOnBottom = false;
-        }
-    }
-    else{
-        playBlocks[currentBlockNo].moveOneLineDown();
-        changeStateInBlockDown();
-    }*/
+void Looper::stateBlockDown()
+{
+  // is alredy checked that the block is not on bottom
+  playBlocks[currentBlockNo].moveOneLineDown();
+
+//  if (playground.isOnBottom(playBlocks[currentBlockNo].getBlockPositions()))
+//  {
+//    if ()
+//    { // block on bottom and fix block
+//      changeStateInBlockDown();
+//    }
+//    else
+//    {
+//      moveBlockOnBottom = false;
+//    }
+//  }
+//  else
+//  {
+//    playBlocks[currentBlockNo].moveOneLineDown();
+//    changeStateInBlockDown();
+//  }
 }
 
 // TO DO!!!!!!!!!!!! BUTTONS PUSHED
-void Looper::stateMoveBlock(){
-    // move possible
-    // do move
-    if (playground.isSpaceRight(playBlocks[currentBlockNo].getBlockPositions())){
-        //&& btnPushed){     TO DO
-        // move right
-        playBlocks[currentBlockNo].moveRight();
-    }
-    else if (playground.isSpaceLeft(playBlocks[currentBlockNo].getBlockPositions())){
-        // && btnPushed){
-        // move left
-        playBlocks[currentBlockNo].moveLeft();
-    }
-    else if(false){//TO DO MOVE TO BOTTOM WHEN BUTTON PUSHED
-        // Move to bottom
-        playBlocks[currentBlockNo].moveToBottom();
-        gameState = fixBlock;
-    }
+void Looper::stateMoveBlock()
+{
+  // move possible
+  // do move
+  if (playground.isSpaceRight(playBlocks[currentBlockNo].getBlockPositions()))
+  {
+    //&& btnPushed){     TO DO
+    // move right
+    playBlocks[currentBlockNo].moveRight();
+  }
+  else if (playground.isSpaceLeft(playBlocks[currentBlockNo].getBlockPositions()))
+  {
+    // && btnPushed){
+    // move left
+    playBlocks[currentBlockNo].moveLeft();
+  }
+  else if (false)
+  {        //TO DO MOVE TO BOTTOM WHEN BUTTON PUSHED
+    // Move to bottom
+    playBlocks[currentBlockNo].moveToBottom();
+    gameState = fixBlock;
+  }
 }
 
 // state rotate block
-void Looper::stateRotateBlock(){
-    uint8_t rotatedPositions[4];
-    playBlocks[currentBlockNo].getBlockRotatedPositions(&rotatedPositions[0]);
-    if (playground.canRotate(&rotatedPositions[0])){
-        playBlocks[currentBlockNo].rotate();
-    }
-    else{
-        ;
-    }
+void Looper::stateRotateBlock()
+{
+  uint8_t rotatedPositions[4];
+  playBlocks[currentBlockNo].getBlockRotatedPositions(&rotatedPositions[0]);
+  if (playground.canRotate(&rotatedPositions[0]))
+  {
+    playBlocks[currentBlockNo].rotate();
+  }
+  else
+  {
+    ;
+  }
 }
 
 // state fix block
-void Looper::stateFixBlock(){
-    uint8_t *pointerBlockPos = playBlocks[currentBlockNo].getBlockPositions();
-    for (uint8_t i = 0; i < 4; i++)
-    {
-        uint8_t fieldNo;
-        fieldNo = *pointerBlockPos;
-        playground.setField(fieldNo, playBlocks[currentBlockNo].getBlockType());
-        pointerBlockPos++;
-    }
+void Looper::stateFixBlock()
+{
+  uint8_t *pointerBlockPos = playBlocks[currentBlockNo].getBlockPositions();
+  for (uint8_t i = 0; i < 4; i++)
+  {
+    uint8_t fieldNo;
+    fieldNo = *pointerBlockPos;
+    playground.setField(fieldNo, playBlocks[currentBlockNo].getBlockType());
+    pointerBlockPos++;
+  }
 }
 
 // state killLine
-void Looper::stateKillLine(){
-    for(uint8_t line = 0; line <= 21; line++){
-        if(playground.isLineFull(line)){
-            playground.killLine(line);
-            score += 100/counter;
-            killedLines++;
-        }
+void Looper::stateKillLine()
+{
+  for (uint8_t line = 0; line <= 21; line++)
+  {
+    if (playground.isLineFull(line))
+    {
+      playground.killLine(line);
+      score += 100 / counter;
+      killedLines++;
     }
+  }
 }
 
 // changew state in blockDown state
 //  TO DO, include push buttons
-void Looper::changeStateInBlockDown(){
-    if(true){           // move block
-        gameState = moveBlock;
-    }
-    else if (false)     // rotate
-    {
-        gameState = rotateBlock;
-    }
-    else                // idle
-    {
-        gameState = idle;
-    }
+void Looper::changeStateInBlockDown()
+{
+  if (true)
+  {           // move block
+    gameState = moveBlock;
+  }
+  else if (false)     // rotate
+  {
+    gameState = rotateBlock;
+  }
+  else                // idle
+  {
+    gameState = idle;
+  }
 }
 
 // transitions in idle state
-void Looper::changeStateIdle(){
-    // AND BUTTON PUSHED
-    if (timer >= moveBlockTimer){       
-        counter++;
-        if (true){//BUTTON              //move block
-            gameState = moveBlock;
-        }
-        else if(false){    //BUTTON     // rotate block
-            gameState = rotateBlock;
-        }
-        else{
-            ;
-        }
+void Looper::changeStateIdle()
+{
+  // AND BUTTON PUSHED
+  if (timer >= moveBlockTimer)
+  {
+    counter++;
+    if (true)
+    {                //BUTTON              //move block
+      gameState = moveBlock;
     }
-    // AND BUTTON PUSHED
-    else if (counter >= blockDownCnt){  
-        counter = 0;
-        // fix block
-        if(playground.isOnBottom(playBlocks[currentBlockNo].getBlockPositions())){
-            gameState = fixBlock;
-        }
-        else{                           // block down
-            gameState = blockDown;
-        }
+    else if (false)
+    {    //BUTTON     // rotate block
+      gameState = rotateBlock;
     }
-    else {                              // stay in state
-        ;                               
+    else
+    {
+      ;
     }
+  }
+  // AND BUTTON PUSHED
+  else if (counter >= blockDownCnt)
+  {
+    counter = 0;
+    // fix block
+    if (playground.isOnBottom(playBlocks[currentBlockNo].getBlockPositions()))
+    {
+      gameState = fixBlock;
+    }
+    else
+    {                           // block down
+      gameState = blockDown;
+    }
+  }
+  else
+  {                              // stay in state
+    ;
+  }
 }
 
 // Finalize game, change states and stop loop
-void Looper::finalizeGame(){
-    gameRunning = false;
-    gameState = startGame;
+void Looper::finalizeGame()
+{
+  gameRunning = false;
+  gameState = startGame;
 }

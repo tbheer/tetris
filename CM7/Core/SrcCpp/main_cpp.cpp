@@ -3,10 +3,6 @@
 
 void main_cpp()
 {
-
-	Looper looper=Looper();
-
-	looper.run();
-
-
+  Looper looper = Looper();
+  looper.run();
 }
