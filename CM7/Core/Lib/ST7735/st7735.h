@@ -146,6 +146,7 @@ void ST7735_PlotIncrement(void);
 void ST7735_PlotPoint(int32_t data1, uint16_t color1);
 
 void ST7735_FillRectangle_mod(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
+uint32_t ST7735_DrawString_wS(uint16_t x, uint16_t y, char *pt, int16_t textColor, uint8_t size);
 
 void lcd7735_sendCmd(uint8_t cmd);
 void lcd7735_sendData(uint8_t data);

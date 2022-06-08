@@ -23,7 +23,8 @@ void setUpField()
 		u++;
 		ST7735_FillRectangle(0, (u*8), 8, 8, ST7735_RED);
 	}
-
+	char text[] = "test" ;
+	ST7735_DrawString_wS(0x0010, 0x0010, text, ST7735_BLUE, 3);
 //	ST7735_DrawFastVLine(x, y, h, color)
 
 

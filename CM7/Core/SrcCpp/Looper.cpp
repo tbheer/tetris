@@ -40,10 +40,32 @@ void Looper::run()
   ST7735_Init();
   ST7735_FillScreen(ST7735_BLACK);
   setUpField();
-
+	  uint32_t buttons ;
   while (true)
   {
 
+	  		 buttons = 0;
+	  		 buttons = ss.readButtons();
+
+	  		  if(!(buttons & (uint32_t)TFTSHIELD_BUTTON_1))
+	  		  {
+	  			//  ST7735_FillRectangle(0x0000, 0x0000, 0x0008, 0x0008, ST7735_RED);
+	  			 // HAL_Delay(100);
+	  			  ST7735_FillScreen(ST7735_GREEN);
+	  		  }
+
+	  		  if(!(buttons & (uint32_t)TFTSHIELD_BUTTON_2))
+	  		  {
+	  			  setUpField();
+	  		  }
+	  		  if(!(buttons & (uint32_t)TFTSHIELD_BUTTON_3))
+	  		  {
+	  			//  ST7735_FillRectangle(0x0000, 0x0000, 0x0008, 0x0008, ST7735_RED);
+	  			 // HAL_Delay(100);
+	  			  ST7735_FillScreen(ST7735_RED);
+	  		  }
+
+	  		  HAL_Delay(5);
 //    switch (processState)
 //    {
 //    case init:
