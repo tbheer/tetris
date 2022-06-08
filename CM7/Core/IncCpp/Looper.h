@@ -9,6 +9,7 @@
 #include "Playground.h"
 #include "Block.h"
 #include "Calculations.h"
+#include "TestFile.h"
 
 #ifndef SRCCPP_LOOPER_H_
 #define SRCCPP_LOOPER_H_
@@ -31,7 +32,8 @@ public:
     multiPlayer = 50,
     gameOver = 60,
     gameWon = 70,
-    ranking = 80
+    ranking = 80,
+    testMode = 255
   };
 
   enum GameState
@@ -54,6 +56,9 @@ public:
 
 private:
   // Variables
+  // Testmode
+  TestFile test = TestFile();
+
   // general
   Calculations calculations = Calculations();
 
@@ -101,6 +106,8 @@ private:
 
   void finalizeGame();
 
+  // Test function
+  void testFct();
 };
 
 #endif /* SRCCPP_LOOPER_H_ */
