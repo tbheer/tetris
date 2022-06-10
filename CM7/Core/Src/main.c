@@ -126,6 +126,9 @@ int main(void)
   MX_I2C1_Init();
   MX_SPI5_Init();
   /* USER CODE BEGIN 2 */
+  MX_USART3_UART_Init();
+  HAL_UART_Transmit(&huart3, "Start boot\n",11,0xFFFF );
+  HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
   main_cpp();
   /* USER CODE END 2 */
 

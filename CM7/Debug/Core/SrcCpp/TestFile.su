@@ -2,3 +2,4 @@
 ../Core/SrcCpp/TestFile.cpp:15:1:TestFile::~TestFile()	16	static
 ../Core/SrcCpp/TestFile.cpp:15:1:virtual TestFile::~TestFile()	16	static
 ../Core/SrcCpp/TestFile.cpp:20:9:uint8_t TestFile::createTestPlayground(uint8_t)	16	static
+../Core/SrcCpp/TestFile.cpp:29:9:uint8_t TestFile::createGapSidePlaygrount(uint8_t)	16	static

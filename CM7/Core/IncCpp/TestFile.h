@@ -25,7 +25,8 @@ public:
 	virtual ~TestFile();
 
 	uint8_t createTestPlayground(uint8_t fieldNo);
-	
+	uint8_t createGapSidePlaygrount(uint8_t fieldNo);
+
 
 private:
 

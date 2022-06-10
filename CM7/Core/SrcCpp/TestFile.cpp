@@ -20,10 +20,18 @@ TestFile::~TestFile() {
 uint8_t TestFile::createTestPlayground(uint8_t fieldNo){
 	if(fieldNo/10 >= 3){
 		if(fieldNo%10 >= fieldNo/10){
-			return fieldNo%6+1;
+			return (fieldNo/10 + fieldNo%10)%6+1;
 		}
 	}
 	return 0;
 }
 
+uint8_t TestFile::createGapSidePlaygrount(uint8_t fieldNo){
+	if(fieldNo/10>3){
+		if(fieldNo%10 <= 2 || fieldNo >= 7){
+			return (fieldNo/10 + fieldNo%10)%6+1;
+		}
+	}
+	return 0;
+}
 
