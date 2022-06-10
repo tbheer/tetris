@@ -39,7 +39,7 @@ void Looper::run()
   // Initialize TFT
   ST7735_Init();
   ST7735_FillScreen(ST7735_BLACK);
-  setUpField();
+//  setUpField();
 	  uint32_t buttons ;
   while (true)
   {
@@ -51,21 +51,66 @@ void Looper::run()
 	  		  {
 	  			//  ST7735_FillRectangle(0x0000, 0x0000, 0x0008, 0x0008, ST7735_RED);
 	  			 // HAL_Delay(100);
-	  			  ST7735_FillScreen(ST7735_GREEN);
+	  			ST7735_FillScreen(ST7735_GREEN);
+	  			HAL_Delay(30);
 	  		  }
 
 	  		  if(!(buttons & (uint32_t)TFTSHIELD_BUTTON_2))
 	  		  {
 	  			  setUpField();
+	  			HAL_Delay(50);
 	  		  }
 	  		  if(!(buttons & (uint32_t)TFTSHIELD_BUTTON_3))
 	  		  {
 	  			//  ST7735_FillRectangle(0x0000, 0x0000, 0x0008, 0x0008, ST7735_RED);
 	  			 // HAL_Delay(100);
-	  			  ST7735_FillScreen(ST7735_RED);
+/*	  			char text[] = "GAME START" ;
+	  			writeState(text, ST7735_BLUE);
+	  			char text2[] = "1254821" ;
+	  			writeScore(text2, ST7735_BLUE);*/
+		  		setPreview(1);
+		  		setPreview(2);
+		  		setPreview(3);
+		  		setPreview(4);
+		  		setPreview(5);
+		  		setPreview(6);
+		  		setPreview(7);
+//		  		setPreview(0);
+	  			HAL_Delay(30);
+	  		  }
+	  		  if(!(buttons & (uint32_t)TFTSHIELD_BUTTON_DOWN))
+	  		  {
+				char text[] = "GAME START" ;
+				writeState(text, ST7735_BLUE);
+				char text2[] = "125482" ;
+				writeScore(text2, ST7735_BLUE);
+				HAL_Delay(50);
 	  		  }
 
-	  		  HAL_Delay(5);
+	  		  if(!(buttons & (uint32_t)TFTSHIELD_BUTTON_UP))
+	  		  {
+	  			uint8_t fieldData[200];
+	  			for(uint8_t i=0; i<=50; i++)
+	  			{
+	  				fieldData[i] = 0x01;
+	  			}
+
+	  			for(uint8_t i=51; i<=110; i++)
+	  			{
+	  				fieldData[i] = 0x03;
+	  			}
+
+
+	  			for(uint8_t i=111; i<=199; i++)
+	  			{
+	  				fieldData[i] = 0x05;
+	  			}
+
+				drawField(fieldData);
+				HAL_Delay(50);
+	  		  }
+
+	  		  HAL_Delay(10);
 //    switch (processState)
 //    {
 //    case init:

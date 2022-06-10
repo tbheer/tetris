@@ -11,7 +11,7 @@ int TimeIndex;
 uint16_t PlotBGColor;
  
 static void ST7735_SetAddressWindow(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
-	uint8_t buffer[4];
+	uint8_t buffer[4], error=0;
 
     	lcd7735_sendCmd(ST7735_CASET); // Column addr set
 
@@ -26,8 +26,13 @@ static void ST7735_SetAddressWindow(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t 
     	buffer[2] = 0x00;
     	buffer[3] = (x1+ST7735_XSTART);
     	LCD_DC1;
-    	HAL_SPI_Transmit(&hspi5, buffer,sizeof(buffer),0x1);
-
+    	HAL_SPI_Transmit(&hspi5, buffer,sizeof(buffer),HAL_MAX_DELAY);
+        if(error == HAL_ERROR || error == HAL_TIMEOUT || error == HAL_BUSY)
+        {
+        	error = 0;
+        }
+        LCD_CS1;
+        LCD_CS0;
 		lcd7735_sendCmd(ST7735_RASET); // Row addr set
 /*		lcd7735_sendData(0x00);
 		lcd7735_sendData(y0+ST7735_YSTART);     // YSTART
@@ -39,8 +44,13 @@ static void ST7735_SetAddressWindow(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t 
     	buffer[2] = 0x00;
     	buffer[3] = (y1+ST7735_YSTART);
     	LCD_DC1;
-    	HAL_SPI_Transmit(&hspi5, buffer,sizeof(buffer),0x1);
-
+    	HAL_SPI_Transmit(&hspi5, buffer,sizeof(buffer),HAL_MAX_DELAY);
+        if(error == HAL_ERROR || error == HAL_TIMEOUT || error == HAL_BUSY)
+        {
+        	error = 0;
+        }
+        LCD_CS1;
+        LCD_CS0;
 		lcd7735_sendCmd(ST7735_RAMWR); 
 }
 void ST7735_Init() {		// Vor ausführen idealerweise Reset mit Seesaw ausführen
@@ -311,7 +321,7 @@ void ST7735_DrawPixel(uint16_t x, uint16_t y, uint16_t color) {
 		//lcd7735_sendData(data[0]);
 		//lcd7735_sendData(data[1]);
  
-    LCD_CS1;  //unselect
+		LCD_CS1;  //unselect
 }
 uint32_t ST7735_DrawString(uint16_t x, uint16_t y, char *pt, int16_t textColor){
   uint32_t count = 0;
@@ -332,7 +342,7 @@ uint32_t ST7735_DrawString_wS(uint16_t x, uint16_t y, char *pt, int16_t textColo
   while(*pt){
     ST7735_DrawCharS(x, y, *pt, textColor, ST7735_BLACK, size);
     pt++;
-    x = x+6;
+    x = x+(6*size);
     if(x>128) return count;  // number of characters printed
     count++;
   }
@@ -360,13 +370,13 @@ void ST7735_DrawCharS(int16_t x, int16_t y, char c, int16_t textColor, int16_t b
         if (size == 1) 
           ST7735_DrawPixel(x+i, y+j, textColor);
         else {  
-          ST7735_FillRectangle(x+(i*size), y+(j*size), size, size, textColor);
+        	ST7735_FillRectangle_mod(x+(i*size), y+(j*size), size, size, textColor);
         }
       } else if (bgColor != textColor) {
         if (size == 1) // default size
           ST7735_DrawPixel(x+i, y+j, bgColor);
         else {  // big size
-         ST7735_FillRectangle(x+i*size, y+j*size, size, size, bgColor);
+        	ST7735_FillRectangle_mod(x+i*size, y+j*size, size, size, bgColor);
         }
       }
       line >>= 1;
@@ -421,7 +431,7 @@ void ST7735_Drawaxes(uint16_t axisColor, uint16_t bgColor, char *xLabel,char *yL
 void ST7735_DrawFastHLine(int16_t x, int16_t y, int16_t w, uint16_t color) {
   uint8_t buffer[] = {(uint8_t)(color >> 8), (uint8_t)color};
 
-	LCD_CS0;
+  LCD_CS0;
   // Rudimentary clipping
   if((x >= ST7735_WIDTH) || (y >= ST7735_HEIGHT)) return;
   if((x+w-1) >= ST7735_WIDTH)  w = ST7735_WIDTH-x;
@@ -495,7 +505,7 @@ void ST7735_FillRectangle_mod(uint16_t x, uint16_t y, uint16_t w, uint16_t h, ui
     }
     LCD_DC1;//Set DC HIGH
     error =  HAL_SPI_Transmit(&hspi5, buffer,i,HAL_MAX_DELAY);
-    if(error == HAL_ERROR)
+    if(error == HAL_ERROR || error == HAL_TIMEOUT || error == HAL_BUSY)
     {
     	error = 0;
     }
@@ -568,14 +578,13 @@ void ST7735_InvertColors(bool invert) {
 }
  
 void lcd7735_sendCmd(uint8_t cmd) {  //uint8_t       //unsigned char
-	uint8_t error, i = 0;
-
+	uint8_t error=0, i = 0;
 	LCD_DC0; //Set DC low
 	do
 	{
 		error =  HAL_SPI_Transmit(&hspi5, &cmd,sizeof(cmd),HAL_MAX_DELAY);
 		i++;
-		if(error == HAL_ERROR)
+		if(error == HAL_ERROR || error == HAL_TIMEOUT || error == HAL_BUSY)
 		{
 		   LCD_DC1; //Set DC low
 		   LCD_CS1;
@@ -584,7 +593,7 @@ void lcd7735_sendCmd(uint8_t cmd) {  //uint8_t       //unsigned char
 		   LCD_DC0; //Set DC low
 		}
 	}
-	while((error==HAL_ERROR) && (i<3));
+	while(((error==HAL_ERROR)|| error==HAL_TIMEOUT|| error == HAL_BUSY) && (i<3));
 	LCD_DC1;
    //lcd7735_senddata(cmd);
 }
