@@ -51,27 +51,28 @@ uint8_t writeState(char *text, uint16_t color)
 
 }
 
-uint8_t writeScore(char *text, uint16_t color) // Übergabewert von Char auf Hex änderne und Umwandlung hier machen
+uint8_t writeScore(uint32_t score, uint16_t color)
 {
+	char scoreTxt[10] = {0, 0, 0,0, 0, 0, 0, 0, 0, 0}; 							// Uint32_t gibt max. 10 stellen, topLine und botLine müssen 7 gross und
+	char topLine[7] = {48,48,48,48,48,48,0}, botLine[7]={48,48,48,48,48,48,0};	// der letzte char 0 sein da DrawString auf 0 prüft und erst dann abbricht
+	//char title[7]={83,99,111,114,101,58,0}; 	// Score:
+	char title[7]={83,67,79,82,69,58,0};		// SCORE:
+	sprintf(scoreTxt, "%d", score);
 
-
-	uint8_t NrOfChar=0;
-	while(*text)
+	for(uint8_t i=0; i<=5; i++)
 	{
-		text++;
-		NrOfChar++;
-	}
-	text = text-NrOfChar;
-	if(NrOfChar>10)
-	{
-		return 0x01;
-	}
-	else
-	{
-		ST7735_DrawString_wS(0x0056, 0x0068, text, color, 1 );
-		return 0;
+		botLine[5-i] = scoreTxt[9-i];
 	}
 
+	for(uint8_t i=0; i<=3; i++)
+	{
+		topLine[5-i] = scoreTxt[(9-(i+6))];
+	}
+
+
+	ST7735_DrawString_wS(0x0056, 0x0058, title, color, 1 );
+	ST7735_DrawString_wS(0x0056, 0x0060, topLine, color, 1 );
+	ST7735_DrawString_wS(0x0056, 0x0068, botLine, color, 1 );
 }
 
 void setPreview(uint8_t block)

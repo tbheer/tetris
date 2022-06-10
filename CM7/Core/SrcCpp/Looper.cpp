@@ -103,8 +103,8 @@ void Looper::run()
 	  		  {
 				char text[] = "GAME START" ;
 				writeState(text, ST7735_BLUE);
-				char text2[] = "125482" ;
-				writeScore(text2, ST7735_BLUE);
+				uint32_t score = 1010101015;
+				writeScore(score, ST7735_BLUE);
 				HAL_Delay(50);
 	  		  }
 
