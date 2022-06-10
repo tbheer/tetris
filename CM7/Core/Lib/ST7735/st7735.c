@@ -605,10 +605,7 @@ void lcd7735_sendData(uint8_t data) {  //uint8_t      //unsigned char
 }
  
 void lcd7735_senddata(uint8_t data) {
-	uint8_t error, i = 0;
 
-	error =  HAL_SPI_Transmit(&hspi5, &data,sizeof(data),HAL_MAX_DELAY);
-
-
+	HAL_SPI_Transmit(&hspi5, &data,sizeof(data),HAL_MAX_DELAY);
 
 }
