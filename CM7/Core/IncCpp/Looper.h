@@ -10,6 +10,12 @@
 #include "Block.h"
 #include "Calculations.h"
 #include "TestFile.h"
+#include "st7735.h"
+#include "main.h"
+#include <Adafruit_TFTShield18.h>
+#include "TFT_Functions.h"
+#include <iostream>
+#include "usart.h"
 
 #ifndef SRCCPP_LOOPER_H_
 #define SRCCPP_LOOPER_H_
@@ -61,6 +67,8 @@ private:
 
   // general
   Calculations calculations = Calculations();
+  uint32_t buttons;
+  Adafruit_TFTShield18 ss;
 
   // FSM
   ProcessState processState = init;
@@ -88,6 +96,7 @@ private:
   uint8_t nextBlockNo = 1;
 
   // Methods
+  void initScreen();
   void runGame();
   void generateBlocks();
 
