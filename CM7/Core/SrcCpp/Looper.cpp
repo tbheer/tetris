@@ -65,7 +65,7 @@ void Looper::run()
 	  		 buttons = 0;
 	  		 buttons = ss.readButtons();
 
-	  		  if(!(buttons & (uint32_t)TFTSHIELD_BUTTON_1))
+/*	  		  if(!(buttons & (uint32_t)TFTSHIELD_BUTTON_1))
 	  		  {
 	  			//  ST7735_FillRectangle(0x0000, 0x0000, 0x0008, 0x0008, ST7735_RED);
 	  			 // HAL_Delay(100);
@@ -84,10 +84,10 @@ void Looper::run()
 	  		  {
 	  			//  ST7735_FillRectangle(0x0000, 0x0000, 0x0008, 0x0008, ST7735_RED);
 	  			 // HAL_Delay(100);
-/*	  			char text[] = "GAME START" ;
+	  			char text[] = "GAME START" ;
 	  			writeState(text, ST7735_BLUE);
 	  			char text2[] = "1254821" ;
-	  			writeScore(text2, ST7735_BLUE);*/
+	  			writeScore(text2, ST7735_BLUE);
 		  		setPreview(1);
 		  		setPreview(2);
 		  		setPreview(3);
@@ -131,8 +131,8 @@ void Looper::run()
 				HAL_Delay(50);
 	  		  }
 
-	  		  HAL_Delay(10);
-	  		  /*
+	  		  HAL_Delay(10);*/
+
    switch (processState)
    {
    case init:
@@ -184,7 +184,6 @@ void Looper::run()
      break;
    case testMode:
      
-   }*/
   }
 }
 
