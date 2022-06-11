@@ -152,9 +152,6 @@ void Looper::initScreen() {
 	// init display
 	ss.begin();
 	// Start set the backlight on
-	uint8_t test[] = { 115, 120, 10, 231, 42, 47 };
-	uint8_t *pointer = &test[0];
-	HAL_UART_Transmit(&huart3, pointer, 6, 0xFFFF);
 	ss.setBacklight(TFTSHIELD_BACKLIGHT_ON);
 	// Reset the TFT
 
