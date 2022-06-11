@@ -77,8 +77,8 @@ Seter Methods
 // Kill the line and move all blocks above one field down
 void Playground::killLine(uint8_t lineNo){
     // special gui effects?
-    uint8_t fieldNo = lineNo * ROWS;
-    for(fieldNo; fieldNo >= 0; fieldNo--){
+    uint8_t fieldNo = (lineNo * ROWS) +(ROWS-1);		// Sets start Block to move one line down
+    for(fieldNo; fieldNo >= ROWS; fieldNo--){				// moves all lines down, 1 line is empty afterwards
         fields[fieldNo] = fields[fieldNo - ROWS];
     }
     // rst top line
@@ -89,7 +89,6 @@ void Playground::killLine(uint8_t lineNo){
 
 // Insert a Line with a randnom space on the bottom
 void Playground::insertLine(uint8_t rdmSpace){
-    uint8_t firstCol = firstBlockColNewLine();
 
     // move all blocks one row up
     for(uint8_t i = 0; i <= MAX_FIELD_NO - ROWS; i++){
@@ -101,7 +100,7 @@ void Playground::insertLine(uint8_t rdmSpace){
             fields[j] = 0;
         }
         else{
-            fields[j] = (firstCol - 1 + j)%7 + 1;
+            fields[j] = 8;	// => 8 = eingefügte Blöcke
         }
     }
     // check overflow
@@ -139,7 +138,7 @@ bool Playground::isOverflow(){
 // check is block on bottom
 bool Playground::isOnBottom(uint8_t *blockArray){
     for(uint8_t i = 0; i<4; i++){
-        if(*blockArray+ROWS!=0) return true;
+        if(fields[(*blockArray+ROWS)]!=0) return true;
         blockArray++;
     }
     return false;
@@ -203,8 +202,10 @@ bool Playground::canRotate(uint8_t *blockArrayRotated){ // playground as pointer
     for(uint8_t i = 0; i<4; i++){
     // check for busy fields when block is rotated
     if(fields[*blockArrayRotated] != 0) return false;
-    // check the right egde
-    if(origin > 5 && *blockArrayRotated < 5) return false;
+    // check the right edge
+    if(origin > 5 && (*blockArrayRotated%10) < 5) return false;
+    // check the left edge
+    if(origin < 5 && (*blockArrayRotated%10) > 5) return false;
     }
     return true;
 }

@@ -24,7 +24,14 @@ Block::~Block() {
 // reset properties an set new type
 void Block::renewBlock(uint8_t type){
     Block::blockType = type;
-    origin = FIRST_ORIGIN;
+    if(type == 2)
+    {
+    	origin = 0x04;
+    }
+    else
+    {
+    	origin = FIRST_ORIGIN;
+    }
     rotation = 0;
     getBlockPositions();
 }
@@ -199,5 +206,15 @@ void Block::sumArrays(uint8_t origin,
         arrayToRead++;
         arrayToWrite++;
     }
+
+}
+
+void Block::moveOneLineDown()
+{
+
+}
+
+void Block::moveToBottom()
+{
 
 }

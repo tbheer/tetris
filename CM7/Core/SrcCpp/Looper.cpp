@@ -20,15 +20,13 @@ Looper::~Looper() {
 void Looper::run() {
 	//HAL_UART_Transmit(&huart3,(const uint8*)"Start run\n", 10, 0xFFFF);
 
-	initScreen();
-
-	// Status LED
-	HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-	HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);
 
 	// main loop here
+	processState = init;
 	while (true) {
-		buttons = 0;
+
+
+/*		buttons = 0;
 		buttons = ss.readButtons();
 
 
@@ -52,7 +50,7 @@ void Looper::run() {
 			/*	  			char text[] = "GAME START" ;
 			 writeState(text, ST7735_BLUE);
 			 char text2[] = "1254821" ;
-			 writeScore(text2, ST7735_BLUE);*/
+			 writeScore(text2, ST7735_BLUE);
 			setPreview(1);
 			setPreview(2);
 			setPreview(3);
@@ -91,22 +89,30 @@ void Looper::run() {
 		}
 
 		HAL_Delay(10);
-		/*
-		 switch (processState)
+		*/
+		buttons = ss.readButtons();
+		switch (processState)
 		 {
 		 case init:
 		 // init system, ethernet, screen, buttons
+		initScreen();
+				// Status LED
+		 HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+		 HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);
+
 		 processState = selectGameMode;
 		 break;
+
 		 case selectGameMode:
 		 // Show screen
-		 if (true)
+		 gameState = startGame;
+		 if (!(buttons & (uint32_t) TFTSHIELD_BUTTON_1))
 		 { // button pushed
-		 processState = gameSettingsSp;
+			processState = gameSettingsSp;
 		 }
 		 else if (false)
 		 {
-		 processState = gameSettingsMp;
+			processState = gameSettingsMp;
 		 }
 		 break;
 
@@ -114,6 +120,7 @@ void Looper::run() {
 		 // Show screen, set start level aso.
 		 if (true)
 		 { // button pushed
+
 		 processState = singlePlayer;
 		 }
 		 break;
@@ -142,8 +149,8 @@ void Looper::run() {
 		 processState = init;
 		 break;
 		 case testMode:
-
-		 }*/
+			 break;
+		 }
 	}
 }
 
@@ -166,39 +173,35 @@ void Looper::initScreen() {
 	ST7735_Init();
 	ST7735_FillScreen(ST7735_BLACK);
 	//  setUpField();
-
 }
 
 void Looper::runGame() {
-	gameRunning = true;
-	while (gameRunning) {
+//	gameRunning = true;
+//	while (gameRunning) {
 		switch (gameState) {
 		case startGame:
-			stateStartGame();
-			gameState = generateNewBlock;
+			stateStartGame();				// Spielfeld gezeichnet, Nächster Block definiert, Variablen zurückgesetzt
+			gameState = idle;
 			break;
 		case generateNewBlock:
 			stateNewBlock();
-			gameState = blockDown;
+			gameState = blockDown; // insert new Block => Checkt ob Block platziert werden kann
 			break;
 		case blockDown:
 			//
 			stateBlockDown();
-			changeStateInBlockDown();
+			gameState = idle;
 			break;
 		case moveBlock:
 			stateMoveBlock();
-			// Change state
-			if (true) {	// TO DO BTN PUSHED
-				gameState = rotateBlock;
-			} else {
-				gameState = idle;
-			}
+			gameState = idle;
 			break;
+
 		case rotateBlock:
 			stateRotateBlock();
 			gameState = idle;
 			break;
+
 		case idle:
 			changeStateIdle();
 			break;
@@ -209,11 +212,13 @@ void Looper::runGame() {
 				processState = gameWon;
 				finalizeGame();
 			}
-			// Change state
-			gameState = killLine;
+			else
+			{
+				gameState = killLine;  // Change state
+			}
 			break;
 		case killLine:
-			// check all lines & kill line
+			// check all lines & kill line and move Lines above
 			stateKillLine();
 			// change state
 			if (playground.isOverflow()) {
@@ -225,6 +230,7 @@ void Looper::runGame() {
 			break;
 		case insertLine:
 			// CHECK HOW MANY LINES
+
 			playground.insertLine(calculations.getRdmSpaceInNewLine());
 			if (playground.isOverflow()) {
 				finalizeGame();
@@ -234,7 +240,7 @@ void Looper::runGame() {
 			}
 			break;
 		}
-	}
+//	}
 }
 
 // Generates 5 new block in the array with default origin
@@ -251,6 +257,7 @@ void Looper::stateStartGame() {
 	killedLines = 0;
 	blocksInGame = 0;
 	generateBlocks();
+	setUpField();
 	/// set level
 	// multiplayer settings
 }
@@ -272,6 +279,9 @@ void Looper::stateNewBlock() {
 //
 void Looper::stateBlockDown() {
 	// is alredy checked that the block is not on bottom
+
+											// Prüfen ob Block um eine Zeile runter geschoben werden darf
+
 	playBlocks[currentBlockNo].moveOneLineDown();
 
 	/*
@@ -293,24 +303,24 @@ void Looper::stateBlockDown() {
 	 }*/
 }
 
-// TO DO!!!!!!!!!!!! BUTTONS PUSHED
+// TO DO!!!!!!!!!!!! BUTTONS PUSHED, CHECK EDGE
 void Looper::stateMoveBlock() {
 	// move possible
 	// do move
-	if (playground.isSpaceRight(
+	if (playground.isSpaceRight(											// Joystick right
 			playBlocks[currentBlockNo].getBlockPositions())) {
 		//&& btnPushed){     TO DO
 		// move right
 		playBlocks[currentBlockNo].moveRight();
-	} else if (playground.isSpaceLeft(
+	} else if (playground.isSpaceLeft(										// Joystick left
 			playBlocks[currentBlockNo].getBlockPositions())) {
 		// && btnPushed){
 		// move left
 		playBlocks[currentBlockNo].moveLeft();
-	} else if (false) {        //TO DO MOVE TO BOTTOM WHEN BUTTON PUSHED
+	} else if (false) {        //TO DO MOVE TO BOTTOM WHEN BUTTON PUSHED 	// Joystick down
 		// Move to bottom
 		playBlocks[currentBlockNo].moveToBottom();
-		gameState = fixBlock;
+		gameState = blockDown;
 	}
 }
 
@@ -338,7 +348,7 @@ void Looper::stateFixBlock() {
 
 // state killLine
 void Looper::stateKillLine() {
-	for (uint8_t line = 0; line <= 21; line++) {
+	for (uint8_t line = 0; line < 21; line++) {
 		if (playground.isLineFull(line)) {
 			playground.killLine(line);
 			score += 100 / counter;
@@ -363,13 +373,15 @@ void Looper::changeStateInBlockDown() {
 
 // transitions in idle state
 void Looper::changeStateIdle() {
-	// AND BUTTON PUSHED
 	if (timer >= moveBlockTimer) {
+	// AND BUTTON PUSHED
 		counter++;
-		if (true) {                //BUTTON              //move block
+		if (true) {                //BUTTON          //move block Joystick
 			gameState = moveBlock;
-		} else if (false) {    //BUTTON     // rotate block
+		} else if (false) {    //BUTTON     		// rotate block Button A
 			gameState = rotateBlock;
+		} else if(false){							// fix block Button C
+			gameState = fixBlock;
 		} else {
 			;
 		}
@@ -391,7 +403,7 @@ void Looper::changeStateIdle() {
 
 // Finalize game, change states and stop loop
 void Looper::finalizeGame() {
-	gameRunning = false;
+//	gameRunning = false;
 	gameState = startGame;
 }
 
