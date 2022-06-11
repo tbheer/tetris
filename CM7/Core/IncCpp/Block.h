@@ -11,24 +11,27 @@
 
 class Block {
 public:
+	// Constructor
 	Block();
 	Block(uint8_t blockType);
-	void newBlock(uint8_t blockType);
 	virtual ~Block();
+	// init
 	void renewBlock(uint8_t type);
+	// get
 	uint8_t getRotation();
 	uint8_t getOrigin();
 	uint8_t getBlockType();
 	uint8_t* getBlockPositions();
 	uint8_t* getBlockRotatedPositions(uint8_t *array);
 	uint8_t* getBlockPreview(uint8_t originBottom, uint8_t *array);
+	// set & move
 	void setBlockType(uint8_t type);
+	void setOrigin(uint8_t newOrigin);
 	void moveOneLineDown();
-	void moveToBottom();
+	void moveToBottom(uint8_t *fourColums);
 	void rotate();
 	void moveLeft();
 	void moveRight();
-	void setOrigin(uint8_t newOrigin);
 	
 
 private:
@@ -89,8 +92,8 @@ private:
 	// NULL matrix
 	const uint8_t NULL_MATRIX[4] = {0,0,0,0};
 	// spaghetti
-	const uint8_t SPAGHETTI0[4] = {0,1,2,3};
-	const uint8_t SPAGHETTI1[4] = {0,10,20,30};//{1, 11, 21, 31}
+	const uint8_t SPAGHETTI0[4] = {0,10,20,30};
+	const uint8_t SPAGHETTI1[4] = {0,1,2,3};
 	// square
 	const uint8_t SQUARE[4] = {0,1,10,11};
 	// invZ
@@ -100,25 +103,26 @@ private:
 	const uint8_t CORR_Z0[4] = {0,1,11,12};
 	const uint8_t CORR_Z1[4] = {1,10,11,20};
 	// invL
-	const uint8_t INV_L0[4] = {0,1,2,12};
-	const uint8_t INV_L1[4] = {1,11,20,21};
-	const uint8_t INV_L2[4] = {0,10,11,12};
-	const uint8_t INV_L3[4] = {0,1,10,20};
-
+	const uint8_t INV_L0[4] = {1,11,20,21};
+	const uint8_t INV_L1[4] = {0,10,11,12};
+	const uint8_t INV_L2[4] = {0,1,10,20};
+	const uint8_t INV_L3[4] = {0,1,2,12};
 	// cortectL
-	const uint8_t CORR_L0[4] = {2,10,11,12};
-	const uint8_t CORR_L1[4] = {0,10,20,21};
-	const uint8_t CORR_L2[4] = {0,1,2,10};
-	const uint8_t CORR_L3[4] = {0,1,11,21};
-
+	const uint8_t CORR_L0[4] = {0,10,20,21};
+	const uint8_t CORR_L1[4] = {0,1,2,10};
+	const uint8_t CORR_L2[4] = {0,1,11,21};
+	const uint8_t CORR_L3[4] = {2,10,11,12};
 	// pyramid
 	const uint8_t PYR0[4] = {1,10,11,12};
 	const uint8_t PYR1[4] = {0,10,11,20};
 	const uint8_t PYR2[4] = {0,1,2,11};
 	const uint8_t PYR3[4] = {1,10,11,21};
 
-	const uint8_t FIRST_ORIGIN = 3;			// Spawning Koordinate Y=0, X=3
+	const uint8_t FIRST_ORIGIN = 4;
 	
+	bool lowestSquareInThisColumn(uint8_t fieldNo, uint8_t *blockArray);
+	uint8_t rowDifference(uint8_t field, uint8_t *column);
+
 	void originToArray(uint8_t origin, 
 		uint8_t *array, 
 		uint8_t rotation,

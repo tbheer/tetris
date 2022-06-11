@@ -20,8 +20,10 @@ public:
     uint8_t getMaxRow();
     uint8_t getMaxLine();
     uint8_t getField(uint8_t fieldNo);
+    uint8_t getHighestBlockInCol(uint8_t field);
     
     // seter methods
+    void rstPlayground();
     void killLine(uint8_t line);
     void insertLine(uint8_t rdmSpace);
     void setField(uint8_t fieldNo, uint8_t blockType);
@@ -33,7 +35,7 @@ public:
 	bool isSpaceRight(uint8_t *blockArray);
 	bool isSpaceLeft(uint8_t *blockArray);
 	bool canRotate(uint8_t *blockArrayRotated);
-    uint8_t highestPointInRow(uint8_t rowNo);
+    void highestPointInRow(uint8_t fieldNo, uint8_t *highestBlock);
 
     // Miscellanious methods
 	uint8_t getPreview(uint8_t *blockArray, uint8_t *previewArray);

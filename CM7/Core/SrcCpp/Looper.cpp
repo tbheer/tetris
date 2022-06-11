@@ -257,7 +257,8 @@ void Looper::stateStartGame() {
 	killedLines = 0;
 	blocksInGame = 0;
 	generateBlocks();
-	setUpField();
+	setUpField(); 	// TFT fct
+	playground.rstPlayground();
 	/// set level
 	// multiplayer settings
 }
@@ -319,7 +320,8 @@ void Looper::stateMoveBlock() {
 		playBlocks[currentBlockNo].moveLeft();
 	} else if (false) {        //TO DO MOVE TO BOTTOM WHEN BUTTON PUSHED 	// Joystick down
 		// Move to bottom
-		playBlocks[currentBlockNo].moveToBottom();
+		// GET COLUMNS
+		//void moveToBottom(uint8_t *fourColums);
 		gameState = blockDown;
 	}
 }
