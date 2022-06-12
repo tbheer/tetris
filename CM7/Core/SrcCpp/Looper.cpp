@@ -20,6 +20,8 @@ Looper::~Looper() {
 void Looper::run() {
 	//HAL_UART_Transmit(&huart3,(const uint8*)"Start run\n", 10, 0xFFFF);
 
+	// init system, ethernet, screen, buttons
+	initScreen();
 
 	// main loop here
 	processState = init;
@@ -94,8 +96,7 @@ void Looper::run() {
 		switch (processState)
 		 {
 		 case init:
-		 // init system, ethernet, screen, buttons
-		initScreen();
+
 				// Status LED
 		 HAL_GPIO_WritePin(LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 		 HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, GPIO_PIN_SET);

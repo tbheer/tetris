@@ -137,22 +137,34 @@ void Block::moveToBottom(uint8_t *fourColums) {
 
 // Rotates the Block in clockwise
 void Block::rotate() {
-
-rotation++;
+	uint8_t tmpRotation = rotation + 1;
+	uint8_t array[4];
+	originToArray(origin, array, tmpRotation, blockType);
+	if (!overflowRight(origin, array) && !overflowLeft(origin, array)) {
+		rotation++;
+	}
 }
 
 // Move block one field right
 // Call this method just after a check
 void Block::moveRight() {
-
-origin++;
+	uint8_t tmpOrigin = origin+1;
+	uint8_t array[4];
+	originToArray(tmpOrigin, array, rotation, blockType);
+	if(!overflowRight(tmpOrigin, array)){
+		origin++;
+	}
 }
 
 // Move block one field left
 // Call this method just after a check
 void Block::moveLeft() {
-
-origin--;
+	uint8_t tmpOrigin = origin-1;
+		uint8_t array[4];
+		originToArray(tmpOrigin, array, rotation, blockType);
+		if(!overflowLeft(tmpOrigin, array)){
+			origin--;
+		}
 }
 
 /*
@@ -176,6 +188,24 @@ return false;
 // calculates the row difference, 10 coresponds to 1 row
 uint8_t Block::rowDifference(uint8_t field, uint8_t *column){
 
+}
+
+// Check edge overflow on the right playground edge
+bool Block::overflowRight(uint8_t origin, uint8_t *array){
+	for(uint8_t i = 0;i<4;i++){
+		if (origin > 5 && (*array % 10) < 5)return true;
+		array++;
+	}
+	return false;
+}
+
+// Check edge overflow on the left playground edge
+bool Block::overflowLeft(uint8_t origin, uint8_t *array){
+	for(uint8_t i = 0;i<4;i++){
+		if (origin < 5 && (*array % 10) > 5)return true;
+		array++;
+	}
+	return false;
 }
 
 // calculates the position of the four block parts and retuns the values

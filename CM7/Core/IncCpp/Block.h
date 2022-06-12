@@ -92,8 +92,8 @@ private:
 	// NULL matrix
 	const uint8_t NULL_MATRIX[4] = {0,0,0,0};
 	// spaghetti
-	const uint8_t SPAGHETTI0[4] = {0,10,20,30};
-	const uint8_t SPAGHETTI1[4] = {0,1,2,3};
+	const uint8_t SPAGHETTI0[4] = {0,1,2,3};
+	const uint8_t SPAGHETTI1[4] = {1,11,21,31};
 	// square
 	const uint8_t SQUARE[4] = {0,1,10,11};
 	// invZ
@@ -103,15 +103,15 @@ private:
 	const uint8_t CORR_Z0[4] = {0,1,11,12};
 	const uint8_t CORR_Z1[4] = {1,10,11,20};
 	// invL
-	const uint8_t INV_L0[4] = {1,11,20,21};
-	const uint8_t INV_L1[4] = {0,10,11,12};
-	const uint8_t INV_L2[4] = {0,1,10,20};
-	const uint8_t INV_L3[4] = {0,1,2,12};
+	const uint8_t INV_L0[4] = {0,10,11,12};
+	const uint8_t INV_L1[4] = {0,1,10,20};
+	const uint8_t INV_L2[4] = {0,1,2,12};
+	const uint8_t INV_L3[4] = {1,11,20,21};
 	// cortectL
-	const uint8_t CORR_L0[4] = {0,10,20,21};
-	const uint8_t CORR_L1[4] = {0,1,2,10};
-	const uint8_t CORR_L2[4] = {0,1,11,21};
-	const uint8_t CORR_L3[4] = {2,10,11,12};
+	const uint8_t CORR_L0[4] = {2,10,11,12};
+	const uint8_t CORR_L1[4] = {0,10,20,21};
+	const uint8_t CORR_L2[4] = {0,1,2,10};
+	const uint8_t CORR_L3[4] = {0,1,11,21};
 	// pyramid
 	const uint8_t PYR0[4] = {1,10,11,12};
 	const uint8_t PYR1[4] = {0,10,11,20};
@@ -122,6 +122,8 @@ private:
 	
 	bool lowestSquareInThisColumn(uint8_t fieldNo, uint8_t *blockArray);
 	uint8_t rowDifference(uint8_t field, uint8_t *column);
+	bool overflowRight(uint8_t origin, uint8_t *array);
+	bool overflowLeft(uint8_t origin, uint8_t *array);
 
 	void originToArray(uint8_t origin, 
 		uint8_t *array, 

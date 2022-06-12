@@ -246,6 +246,15 @@ void Playground::highestPointInRow(uint8_t fieldNo, uint8_t *highestBlock) {
 	}
 }
 
+// Checking for settet squares/blocks under the current block
+bool Playground::squareOverlapping(uint8_t *blockArray){
+	for(uint8_t i = 0;i<4;i++){
+		if(fields[*blockArray] != 0)
+			return true;
+	}
+	return false;
+}
+
 /*
  Miscellanious methods
  */

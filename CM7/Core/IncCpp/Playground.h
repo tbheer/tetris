@@ -36,6 +36,7 @@ public:
 	bool isSpaceLeft(uint8_t *blockArray);
 	bool canRotate(uint8_t *blockArrayRotated);
     void highestPointInRow(uint8_t fieldNo, uint8_t *highestBlock);
+    bool squareOverlapping(uint8_t *blockArray);
 
     // Miscellanious methods
 	uint8_t getPreview(uint8_t *blockArray, uint8_t *previewArray);
